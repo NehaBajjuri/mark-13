@@ -70,4 +70,34 @@ function checkPalin(date)
     }
     return flag;
 }
-console.log(checkPalin(date));
+function getNextDAte(date){
+    var day = date.day+1;
+     var month = date.month;
+     var year = date.year;
+     var daysInMonth = [31,28,31,30,31,30,31,31,30,31,30,31];
+    if(month == 2)
+    {
+        if(day > daysInMonth[month])
+    }
+
+}
+function isLeapYear(year){
+    if (year % 400===0)
+    {
+        return true;
+    }
+    if(year % 100 ===0)
+    {
+        return false;
+    }
+    if(year % 4 ===0)
+    {
+        return true;
+    }
+    return false;
+}
+function getNextPalindrome(date)
+{
+
+}
+console.log(isLeapYear(2021));
