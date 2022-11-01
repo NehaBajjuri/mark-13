@@ -1,20 +1,44 @@
+var input = document.querySelector('#bday-input');
+var showBut = document.querySelector('#show-button');
+showBut.addEventListener("click",clickHandler);
+var result = document.querySelector('#output');
+function clickHandler(e)
+{
+   var bdayStr = input.value;
+   if(bdayStr != '')
+   {
+    var listOfDate = bdayStr.split('-');
+    var date = {
+        day:Number(listOfDate[2]),
+        month:Number(listOfDate[1]),
+        year:Number(listOfDate[0])
+    };
+    //console.log(date);
+   }
+  var isPalindrome = checkPalin(date);
+  if(isPalindrome)
+  {
+    result.innerText = 'Yayy!! Your birthday is a palindrome!!💃🕺';
+  }
+  else{
+    var [count,nextDate] = getNextPalindrome(date);
+    result.innerText = `The next palindrome is ${nextDate.day}-${nextDate.month}-${nextDate.year},you missed it by ${count} days :/`
+  }
+
+}
 function reverseStr(str){
 
     var listOfChars = str.split('');
     var reverseListOfChars = listOfChars.reverse();
     var reversedStr = reverseListOfChars.join('');
     //return str.split('').reverse().join('')--in a single line
-
     return reversedStr;
 }
 function isPalindrome(str)
 {
 var reverse = reverseStr(str);
-return str===reverse;
-
+return str==reverse;
 }
-
-
 function convertDateToStr(date)
 {
    
@@ -50,11 +74,11 @@ function getAllDateFormats(date)
 return [ddmmyyyy, mmddyyyy, yyyymmdd,mmddyy, yymmdd, ddmmyy];
 
 }
-var date={
-    day: 20,
-    month:2,
-    year:2002
-};
+// var date={
+//     day: 2,
+//     month:2,
+//     year:2020
+// };
 
 function checkPalin(date)
 {
@@ -71,17 +95,91 @@ function checkPalin(date)
     return flag;
 }
 function getNextDAte(date){
-    var day = date.day+1;
+     var day = date.day+1;
      var month = date.month;
      var year = date.year;
      var daysInMonth = [31,28,31,30,31,30,31,31,30,31,30,31];
     if(month == 2)
     {
-        if(day > daysInMonth[month])
+        if(isLeapYear(year))
+        {
+            if(day>29){
+                day =1;
+                month++;
+            }
+        }
+        else{
+            if(day>28)
+            {
+                day =1;
+                month++;
+            }
+        }
+    }
+    else{
+        if(day > daysInMonth[month - 1])
+        {
+            day = 1;
+            month++;
+        }
+        
+    }
+    if(month>12)
+    {
+        month=1;
+        year++;
+    }
+    return{
+        day: day,
+        month: month,
+        year: year,
     }
 
 }
+function getPrevDAte(date){
+    var day = date.day-1;
+    var month = date.month;
+    var year = date.year;
+    var daysInMonth = [31,28,31,30,31,30,31,31,30,31,30,31];
+   if(month == 3)
+   {
+       if(isLeapYear(year))
+       {
+           if(day<1){
+               day =29;
+               month--;
+           }
+       }
+       else{
+           if(day<1)
+           {
+               day =28;
+               month--;
+           }
+       }
+   }
+   else{
+       if(day < 1)
+       {
+           day=daysInMonth[month-1];
+           month--;
+       }
+       
+   }
+   if(month<1)
+   {
+       month=12;
+       year--;
+   }
+   return{
+       day: day,
+       month: month,
+       year: year,
+   }
+
+}
 function isLeapYear(year){
+  
     if (year % 400===0)
     {
         return true;
@@ -98,6 +196,35 @@ function isLeapYear(year){
 }
 function getNextPalindrome(date)
 {
-
+    var count=0;
+    var nextDate = getNextDAte(date);
+    while(1)
+    {
+        count++;
+        var isPalindrome = checkPalin(nextDate);
+        if(isPalindrome)
+        {
+            break;
+        }
+        nextDate = getNextDAte(nextDate);
+    }
+    return [count,nextDate];
 }
-console.log(isLeapYear(2021));
+function getPrevPalindrome(date)
+{
+    var count=0;
+    var nextDate = getPrevDAte(date);
+    while(1)
+    {
+        count++;
+        var isPalindrome = checkPalin(nextDate);
+        if(isPalindrome)
+        {
+            break;
+        }
+        nextDate = getPrevDAte(nextDate);
+    }
+    return [count,nextDate];
+}
+//console.log(getNextDAte(date));
+//console.log(checkPalin(date));
